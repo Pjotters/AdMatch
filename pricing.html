@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>AdMatch - Pricing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <script src="config.js"></script>
+</head>
+<body>
+  <header>
+    <h1>AdMatch</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="upload.html">Upload</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="pricing.html" class="active">Pricing</a>
+      <a href="legal.html">Legal</a>
+      <a href="start.html">Aan de slag</a>
+      <a href="admaker.html">AdMaker</a>
+    </nav>
+  </header>
+  <main>
+    <h2>Abonnementen</h2>
+    <div style="display:flex;gap:2em;flex-wrap:wrap;justify-content:center;margin-bottom:2em;">
+      <div class="card" style="min-width:220px;max-width:260px;background:#1b253a;">
+        <h3>Basic</h3>
+        <div style="font-size:2em;font-weight:700;">€9</div>
+        <div style="color:#1db954;font-weight:600;">per maand</div>
+        <ul style="margin-top:1em;">
+          <li>Alleen foto-advertenties</li>
+          <li>Max. 3 bedrijven</li>
+          <li>Standaard support</li>
+        </ul>
+      </div>
+      <div class="card" style="min-width:220px;max-width:260px;background:#1b253a;">
+        <h3>Pro</h3>
+        <div style="font-size:2em;font-weight:700;">€19</div>
+        <div style="color:#1db954;font-weight:600;">per maand</div>
+        <ul style="margin-top:1em;">
+          <li>Foto + tekst-advertenties</li>
+          <li>Max. 5 bedrijven</li>
+          <li>Snellere goedkeuring</li>
+          <li>Meer templates</li>
+        </ul>
+      </div>
+      <div class="card" style="min-width:220px;max-width:260px;background:#1b253a;">
+        <h3>Premium</h3>
+        <div style="font-size:2em;font-weight:700;">€39</div>
+        <div style="color:#1db954;font-weight:600;">per maand</div>
+        <ul style="margin-top:1em;">
+          <li>Video-advertenties</li>
+          <li>Max. 10 bedrijven</li>
+          <li>Uitgebreide analytics</li>
+          <li>A/B testing</li>
+          <li>Premium support</li>
+        </ul>
+      </div>
+      <div class="card" style="min-width:220px;max-width:260px;background:#1b253a;">
+        <h3>Ultimate</h3>
+        <div style="font-size:2em;font-weight:700;">€69</div>
+        <div style="color:#1db954;font-weight:600;">per maand</div>
+        <ul style="margin-top:1em;">
+          <li>Alles (foto, tekst, video)</li>
+          <li>Alle bedrijven</li>
+          <li>Snelle goedkeuring</li>
+          <li>Premium support</li>
+          <li>Alle features</li>
+        </ul>
+      </div>
+    </div>
+    <h2>Vergelijk abonnementen</h2>
+    <div style="display:flex;gap:2em;justify-content:center;align-items:flex-start;">
+      <div>
+        <label>Kies abonnement 1:<br>
+          <select id="plan1">
+            <option value="basic">Basic</option>
+            <option value="pro">Pro</option>
+            <option value="premium">Premium</option>
+            <option value="ultimate">Ultimate</option>
+          </select>
+        </label>
+      </div>
+      <div>
+        <label>Kies abonnement 2:<br>
+          <select id="plan2">
+            <option value="basic">Basic</option>
+            <option value="pro">Pro</option>
+            <option value="premium">Premium</option>
+            <option value="ultimate">Ultimate</option>
+          </select>
+        </label>
+      </div>
+    </div>
+    <div id="compareTable" style="margin-top:2em;"></div>
+  </main>
+  <footer>&copy; 2025 AdMatch</footer>
+  <script>
+    const planData = {
+      basic: {
+        naam:'Basic', prijs:'€9', types:['Foto'], maxBedrijven:3, support:'Standaard', analytics:false, ab:false, video:false, premium:false, alles:false, templates:'Standaard', goedkeuring:'Normaal'
+      },
+      pro: {
+        naam:'Pro', prijs:'€19', types:['Foto','Tekst'], maxBedrijven:5, support:'Standaard', analytics:false, ab:false, video:false, premium:false, alles:false, templates:'Meer', goedkeuring:'Sneller'
+      },
+      premium: {
+        naam:'Premium', prijs:'€39', types:['Foto','Tekst','Video'], maxBedrijven:10, support:'Premium', analytics:true, ab:true, video:true, premium:true, alles:false, templates:'Veel', goedkeuring:'Snel'
+      },
+      ultimate: {
+        naam:'Ultimate', prijs:'€69', types:['Foto','Tekst','Video'], maxBedrijven:'Alle', support:'Premium', analytics:true, ab:true, video:true, premium:true, alles:true, templates:'Alle', goedkeuring:'Direct'
+      }
+    };
+    const featureRows = [
+      {label:'Prijs', key:'prijs'},
+      {label:'Advertentie-types', key:'types'},
+      {label:'Max. bedrijven', key:'maxBedrijven'},
+      {label:'Support', key:'support'},
+      {label:'Analytics', key:'analytics'},
+      {label:'A/B testing', key:'ab'},
+      {label:'Video', key:'video'},
+      {label:'Premium support', key:'premium'},
+      {label:'Meer templates', key:'templates'},
+      {label:'Goedkeuring', key:'goedkeuring'},
+      {label:'Alles in 1', key:'alles'}
+    ];
+    function renderTable() {
+      const p1 = document.getElementById('plan1').value;
+      const p2 = document.getElementById('plan2').value;
+      let html = `<table style='width:100%;border-spacing:0;'><tr><th></th><th style='background:#1db95422;'>${planData[p1].naam}</th><th style='background:#2979ff22;'>${planData[p2].naam}</th></tr>`;
+      for(const row of featureRows) {
+        let v1 = planData[p1][row.key], v2 = planData[p2][row.key];
+        if(Array.isArray(v1)) v1 = v1.join(', ');
+        if(Array.isArray(v2)) v2 = v2.join(', ');
+        if(typeof v1 === 'boolean') v1 = v1 ? '✔️' : '—';
+        if(typeof v2 === 'boolean') v2 = v2 ? '✔️' : '—';
+        html += `<tr><td>${row.label}</td><td style='text-align:center;'>${v1}</td><td style='text-align:center;'>${v2}</td></tr>`;
+      }
+      html += '</table>';
+      document.getElementById('compareTable').innerHTML = html;
+    }
+    document.getElementById('plan1').addEventListener('change', renderTable);
+    document.getElementById('plan2').addEventListener('change', renderTable);
+    renderTable();
+  </script>
+</body>
+</html>

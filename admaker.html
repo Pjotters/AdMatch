@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>AdMatch - AdMaker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <script src="config.js"></script>
+  <script src="../js/auth.js"></script>
+</head>
+<body>
+  <header>
+    <h1>AdMaker</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="upload.html">Upload</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="legal.html">Legal</a>
+      <a href="start.html">Aan de slag</a>
+      <a href="admaker.html" class="active">AdMaker</a>
+    </nav>
+  </header>
+  <main>
+    <h2>Maak je advertentie</h2>
+    <div class="card">
+      <form id="admakerForm" style="max-width:600px;margin:auto;">
+        <label>Advertentie type:
+          <select id="adType" name="adType">
+            <option value="photo">Foto</option>
+            <option value="text">Tekst</option>
+            <option value="video">Video</option>
+          </select>
+        </label><br><br>
+        <label>Upload bestand:
+          <input type="file" name="adfile" id="adfile" accept="image/*,video/*,.txt">
+        </label><br><br>
+        <label>Tekst:
+          <textarea name="adtext" id="adtext" placeholder="Voeg optioneel tekst toe..." style="width:100%;height:70px;"></textarea>
+        </label><br>
+        <button type="submit" class="button">Voorbeeld genereren</button>
+        <div id="preview"></div>
+      </form>
+    </div>
+  </main>
+  <footer>&copy; 2025 AdMatch</footer>
+  <script>
+    requireLogin();
+    document.getElementById('admakerForm').onsubmit = function(e) {
+      e.preventDefault();
+      const adType = document.getElementById('adType').value;
+      const file = document.getElementById('adfile').files[0];
+      const text = document.getElementById('adtext').value;
+      let preview = document.getElementById('preview');
+      let html = '<h3>Voorbeeld</h3>';
+      if(adType==='photo' && file) {
+        html += `<img src="${URL.createObjectURL(file)}" style="max-width:340px;border-radius:12px;box-shadow:0 2px 18px #1db95422;">`;
+      } else if(adType==='video' && file) {
+        html += `<video src="${URL.createObjectURL(file)}" controls style="max-width:340px;border-radius:12px;box-shadow:0 2px 18px #1db95422;"></video>`;
+      } else if(adType==='text' && text) {
+        html += `<div style='background:#181d2b;padding:1.5em;border-radius:12px;'>${text}</div>`;
+      }
+      if(text && adType!=='text') html += `<div style='margin-top:1em;background:#181d2b;padding:1em;border-radius:8px;'>${text}</div>`;
+      preview.innerHTML = html;
+    };
+  </script>
+</body>
+</html>

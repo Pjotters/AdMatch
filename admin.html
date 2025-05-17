@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>AdMatch - Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <script src="config.js"></script>
+  <script src="../js/auth.js"></script>
+</head>
+<body>
+  <header>
+    <h1>AdMatch Admin</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="upload.html">Upload</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="legal.html">Legal</a>
+      <a href="start.html">Aan de slag</a>
+      <a href="admaker.html">AdMaker</a>
+      <a href="admin.html" class="active">Admin</a>
+    </nav>
+  </header>
+  <main>
+    <h2>Advertentiebeheer</h2>
+    <div id="adminAds">Advertenties laden...</div>
+  </main>
+  <footer>&copy; 2025 AdMatch</footer>
+  <script>
+    requireLogin(function(user){
+      if(user.userType!=='admin') {
+        document.body.innerHTML = '<main class="card" style="margin:5em auto 2em auto;max-width:500px;">Alleen admins mogen deze pagina bekijken.</main>';
+        return;
+      }
+      fetch(window.config.apiUrl + '/api/admatch/allads')
+        .then(r=>r.json())
+        .then(data => {
+          if(!data || !Array.isArray(data) || data.length===0) {
+            document.getElementById('adminAds').innerHTML = '<div class="card">Geen advertenties gevonden.</div>';
+            return;
+          }
+          let html = '';
+          for(const ad of data) {
+            html += `<div class='card'><b>Type:</b> ${ad.type}<br><b>Status:</b> ${ad.status}<br><b>Bedrijven:</b> ${ad.bedrijven.join(', ')}<br>`;
+            if(ad.url) html += `<a href='${ad.url}' target='_blank'>Bekijk bestand</a><br>`;
+            if(ad.text) html += `<div style='margin-top:0.5em;'>${ad.text}</div>`;
+            html += `<div style='margin-top:0.8em;'>`;
+            if(ad.status!=='goedgekeurd') html += `<button onclick='approveAd("${ad.id}")' class='button'>Goedkeuren</button> `;
+            if(ad.status!=='ingetrokken') html += `<button onclick='retractAd("${ad.id}")' class='button' style='background:#ff1744;'>Intrekken</button> `;
+            html += `</div></div>`;
+          }
+          document.getElementById('adminAds').innerHTML = html;
+        });
+    });
+    function approveAd(id) {
+      fetch(window.config.apiUrl + '/api/admatch/approve', {
+        method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})
+      }).then(()=>location.reload());
+    }
+    function retractAd(id) {
+      fetch(window.config.apiUrl + '/api/admatch/retract', {
+        method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})
+      }).then(()=>location.reload());
+    }
+  </script>
+</body>
+</html>

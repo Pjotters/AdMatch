@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>AdMatch - Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <script src="config.js"></script>
+  <script src="../js/auth.js"></script>
+</head>
+<body>
+  <header>
+    <h1>AdMatch</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="upload.html">Upload</a>
+      <a href="dashboard.html" class="active">Dashboard</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="legal.html">Legal</a>
+      <a href="start.html">Aan de slag</a>
+      <a href="admaker.html">AdMaker</a>
+    </nav>
+  </header>
+  <main>
+    <h2>Jouw advertenties</h2>
+    <div id="adsContainer">Advertenties laden...</div>
+  </main>
+  <footer>&copy; 2025 AdMatch</footer>
+  <script>
+    requireLogin(function(user){
+      fetch(window.config.apiUrl + '/api/admatch/myads?userId='+encodeURIComponent(user.userId))
+        .then(r=>r.json())
+        .then(data => {
+          if(!data || !Array.isArray(data) || data.length===0) {
+            document.getElementById('adsContainer').innerHTML = '<div class="card">Je hebt nog geen advertenties geüpload.</div>';
+            return;
+          }
+          let html = '';
+          for(const ad of data) {
+            html += `<div class='card'><b>Type:</b> ${ad.type}<br><b>Status:</b> ${ad.status}<br><b>Bedrijven:</b> ${ad.bedrijven.join(', ')}<br>`;
+            if(ad.url) html += `<a href='${ad.url}' target='_blank'>Bekijk bestand</a><br>`;
+            if(ad.text) html += `<div style='margin-top:0.5em;'>${ad.text}</div>`;
+            html += `</div>`;
+          }
+          document.getElementById('adsContainer').innerHTML = html;
+        });
+    });
+  </script>
+</body>
+</html>

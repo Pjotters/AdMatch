@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>AdMatch - Upload</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <script src="config.js"></script>
+</head>
+<body>
+  <header>
+    <h1>AdMatch</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="upload.html" class="active">Upload</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="legal.html">Legal</a>
+      <a href="start.html">Aan de slag</a>
+      <a href="admaker.html">AdMaker</a>
+    </nav>
+  </header>
+  <main>
+    <h2>Upload je advertentie</h2>
+    <form id="uploadForm" enctype="multipart/form-data" style="max-width:500px;margin:auto;">
+      <label>Abonnement:
+        <select id="planSelect" name="plan">
+          <option value="basic">Basic</option>
+          <option value="pro">Pro</option>
+          <option value="premium">Premium</option>
+          <option value="ultimate">Ultimate</option>
+        </select>
+      </label><br><br>
+      <label>Advertentie type:
+        <select id="adType" name="adType">
+          <option value="photo">Foto</option>
+          <option value="text">Tekst</option>
+          <option value="video">Video</option>
+        </select>
+      </label><br><br>
+      <label>Bedrijven (selecteer):
+        <div id="companyCheckboxes" style="margin:0.7em 0;"></div>
+      </label><br>
+      <input type="file" name="adfile" id="adfile" accept="image/*,video/*,.txt" required><br><br>
+      <textarea name="adtext" id="adtext" placeholder="Voeg optioneel tekst toe..." style="width:100%;height:70px;"></textarea><br>
+      <button type="submit" class="button">Uploaden</button>
+      <div id="uploadMsg"></div>
+    </form>
+  </main>
+  <footer>&copy; 2025 AdMatch</footer>
+  <script>
+    // Limieten per abonnement
+    const planLimits = {
+      basic: {types:['photo'], maxCompanies:3},
+      pro: {types:['photo','text'], maxCompanies:5},
+      premium: {types:['photo','text','video'], maxCompanies:10},
+      ultimate: {types:['photo','text','video'], maxCompanies:99}
+    };
+    let companies = [];
+    fetch('companies.json').then(r=>r.json()).then(data => {
+      companies = data;
+      renderCompanyCheckboxes();
+    });
+    function renderCompanyCheckboxes() {
+      let html = '';
+      for(let i=0;i<companies.length;i++) {
+        html += `<label><input type='checkbox' name='companies' value='${companies[i].name}'> ${companies[i].name}</label><br>`;
+      }
+      document.getElementById('companyCheckboxes').innerHTML = html;
+    }
+    document.getElementById('planSelect').addEventListener('change', updateFormByPlan);
+    function updateFormByPlan() {
+      const plan = document.getElementById('planSelect').value;
+      const adType = document.getElementById('adType');
+      // Type restricties
+      for(let i=0;i<adType.options.length;i++) {
+        adType.options[i].disabled = !planLimits[plan].types.includes(adType.options[i].value);
+      }
+      if(!planLimits[plan].types.includes(adType.value)) adType.value = planLimits[plan].types[0];
+      // Bedrijf restricties
+      const boxes = document.querySelectorAll('#companyCheckboxes input[type=checkbox]');
+      boxes.forEach(b=>b.checked=false);
+    }
+    document.getElementById('companyCheckboxes').addEventListener('change', function(e) {
+      const plan = document.getElementById('planSelect').value;
+      const max = planLimits[plan].maxCompanies;
+      const boxes = document.querySelectorAll('#companyCheckboxes input[type=checkbox]');
+      let checked = 0;
+      boxes.forEach(b=>{if(b.checked) checked++;});
+      if(checked>max) {
+        e.target.checked = false;
+        alert('Maximaal '+max+' bedrijven toegestaan voor jouw abonnement.');
+      }
+    });
+    document.getElementById('uploadForm').onsubmit = function(e) {
+      e.preventDefault();
+      const plan = document.getElementById('planSelect').value;
+      const adType = document.getElementById('adType').value;
+      if(!planLimits[plan].types.includes(adType)){
+        document.getElementById('uploadMsg').innerHTML = 'Advertentietype niet toegestaan voor jouw abonnement!';
+        return;
+      }
+      const boxes = document.querySelectorAll('#companyCheckboxes input[type=checkbox]');
+      let checked = 0;
+      boxes.forEach(b=>{if(b.checked) checked++;});
+      if(checked>planLimits[plan].maxCompanies) {
+        document.getElementById('uploadMsg').innerHTML = 'Te veel bedrijven geselecteerd!';
+        return;
+      }
+      // Upload via backend
+      const formData = new FormData(document.getElementById('uploadForm'));
+      fetch(window.config.apiUrl + '/api/admatch/upload', {
+        method: 'POST',
+        body: formData
+      }).then(r=>r.json()).then(data=>{
+        if(data.success){
+          document.getElementById('uploadMsg').innerHTML = '✔️ Upload geslaagd!';
+        }else{
+          document.getElementById('uploadMsg').innerHTML = '❌ Upload mislukt: '+(data.error||'Onbekende fout');
+        }
+      }).catch(()=>{
+        document.getElementById('uploadMsg').innerHTML = '❌ Upload mislukt (server niet bereikbaar)';
+      });
+    };
+    updateFormByPlan();
+  </script>
+</body>
+</html>

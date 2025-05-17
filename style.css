@@ -1,0 +1,87 @@
+body {
+  background: linear-gradient(120deg, #232c44 0%, #1db954 100%);
+  color: #f3f3f7;
+  font-family: 'Inter', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+header {
+  background: #232c44ee;
+  color: #fff;
+  padding: 1.7em 1em 1em 1em;
+  text-align: center;
+  border-radius: 0 0 18px 18px;
+  box-shadow: 0 2px 18px #1db95433;
+}
+header h1 {
+  margin: 0 0 0.2em 0;
+  font-size: 2.2em;
+  letter-spacing: 0.02em;
+}
+nav {
+  margin: 1em 0 0 0;
+  display: flex;
+  gap: 2em;
+  justify-content: center;
+}
+nav a {
+  color: #b8b8d1;
+  text-decoration: none;
+  font-weight: 500;
+  border-radius: 8px;
+  padding: 0.45em 1.3em;
+  transition: background 0.15s, color 0.15s;
+}
+nav a.active, nav a:hover {
+  background: #1db954;
+  color: #fff;
+}
+main {
+  max-width: 900px;
+  margin: 2.5em auto 2em auto;
+  background: #232c44cc;
+  border-radius: 16px;
+  padding: 2em 2em 2.5em 2em;
+  box-shadow: 0 8px 40px #0007;
+}
+h2, h3 {
+  color: #1db954;
+}
+.card {
+  background: #232c44;
+  border-radius: 14px;
+  box-shadow: 0 2px 18px #1db95422;
+  margin: 1.4em 0;
+  padding: 1.2em 1.5em;
+  color: #f3f3f7;
+}
+footer {
+  margin-top: 40px;
+  padding: 22px 0 12px 0;
+  background: #222c;
+  color: #b8b8d1;
+  text-align: center;
+  font-size: 1em;
+  border-radius: 18px 18px 0 0;
+}
+.button {
+  background: linear-gradient(90deg, #1db954 70%, #2979ff 100%);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 32px;
+  margin: 16px 8px;
+  font-size: 1.08em;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 2px 18px #1db95422;
+  transition: background 0.21s, box-shadow 0.21s, transform 0.21s;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+}
+.button:hover {
+  background: linear-gradient(90deg, #2979ff 70%, #1db954 100%);
+  color: #fff;
+  transform: translateY(-2px) scale(1.06);
+  box-shadow: 0 6px 28px #2979ff44;
+}
