@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>AdMatch Developer API</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .dev-section {background: #232c44cc; border-radius: 16px; margin: 2em auto; max-width: 700px; padding: 2em; box-shadow: 0 8px 40px #0007;}
+    .dev-section h2 {color: #2979ff;}
+    .dev-key-box {display: flex; align-items: center; gap: 1em;}
+    .dev-key {font-family: monospace; background: #181d2b; color: #fff; padding: 0.7em 1em; border-radius: 8px; font-size: 1.1em; word-break: break-all;}
+    .dev-pricing-table {width: 100%; border-collapse: collapse; margin: 1.5em 0;}
+    .dev-pricing-table th, .dev-pricing-table td {padding: 0.7em 1em; border-bottom: 1px solid #2a3550; text-align: left;}
+    .dev-pricing-table th {background: #232c44; color: #2979ff;}
+    .dev-pricing-table td {background: #232c44bb; color: #f3f3f7;}
+    .dev-step {margin-bottom: 1.2em;}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>AdMatch Developer</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="upload.html">Upload</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="admatch-developer.html" class="active">Developer</a>
+    </nav>
+  </header>
+  <main>
+    <section class="dev-section">
+      <h2>API Key genereren</h2>
+      <div class="dev-key-box">
+        <button class="button" id="genKeyBtn">Genereer API Key & Secret</button>
+        <span class="dev-key" id="apiKeyBox">(nog geen key)</span>
+        <span class="dev-key" id="apiSecretBox"></span>
+      </div>
+      <small>Elke developer krijgt een unieke API key <b>en</b> secret. Sla deze zelf veilig op! <b>Beiden</b> zijn vereist bij elke API-aanroep.</small>
+      <br><small style="color:#b8b8d1;">Voor gebruik op je eigen website/app geldt een speciale API key/secret zonder limiet. Vraag deze aan bij de beheerder.</small>
+    </section>
+    <section class="dev-section">
+      <h2>Developer Pricing & Abonnementen</h2>
+      <table class="dev-pricing-table">
+        <thead>
+          <tr><th>Plan</th><th>Prijs (p/m)</th><th>Max. Ads</th></tr>
+        </thead>
+        <tbody id="pricingTable"></tbody>
+      </table>
+    </section>
+    <section class="dev-section">
+      <h2>AdMatch API: Stappenplan</h2>
+      <div class="dev-step"><b>1.</b> Genereer je API key <b>en secret</b> hierboven. Sla deze veilig op, je ziet de secret maar één keer!</div>
+      <div class="dev-step"><b>2.</b> Gebruik de API endpoints, bijvoorbeeld:<br>
+        <code>POST /api/admatch/upload</code> (multipart/form-data, met <b>apiKey</b>, <b>secret</b>, bestand, onderwerp, type, bedrijven, tekst)<br>
+        <code>GET /api/admatch/myads?userId=...</code><br>
+        <code>GET /api/admatch/subjects</code> (voor onderwerpenlijst/autocomplete)
+      </div>
+      <div class="dev-step"><b>3.</b> Voeg je advertentie toe aan het platform. Je advertentie wordt na goedkeuring zichtbaar.</div>
+      <div class="dev-step"><b>4.</b> Bekijk je advertenties via <code>GET /api/admatch/myads</code> of als admin via <code>GET /api/admatch/allads</code>.</div>
+      <div class="dev-step"><b>Let op:</b> Alleen voor gebruik op je eigen website is een speciale API key/secret zonder limiet beschikbaar. Developers moeten altijd hun eigen key + secret gebruiken!</div>
+    </section>
+  </main>
+  <script>
+    // API Key + Secret genereren (NIET opslaan in localStorage)
+    document.getElementById('genKeyBtn').onclick = async function() {
+      let userId = prompt('Vul je gebruikers-ID in:');
+      if (!userId) return alert('Gebruikers-ID vereist!');
+      const resp = await fetch(window.config.apiUrl + '/api/admatch/developer/key', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ userId })
+      });
+      const data = await resp.json();
+      document.getElementById('apiKeyBox').innerText = data.apiKey || '(geen key)';
+      document.getElementById('apiSecretBox').innerText = data.secret ? 'Secret: ' + data.secret : '';
+      setTimeout(()=>{document.getElementById('apiSecretBox').innerText='';}, 180000); // secret 3 min zichtbaar
+    };
+    // Pricing ophalen
+    fetch(window.config.apiUrl + '/api/admatch/developer/pricing').then(r=>r.json()).then(data => {
+      let rows = '';
+      data.plans.forEach(plan => {
+        rows += `<tr><td>${plan.name}</td><td>€${plan.price.toFixed(2)}</td><td>${plan.ads}</td></tr>`;
+      });
+      document.getElementById('pricingTable').innerHTML = rows;
+    });
+  </script>
+</body>
+</html>
