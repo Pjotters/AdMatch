@@ -2,12 +2,182 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
-  <title>AdMatch - Upload</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+  <title>Advertentie Uploaden | AdMatch</title>
+  <link rel="stylesheet" href="style-mediamatch-blue.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:400,500,700&display=swap">
   <script src="config.js"></script>
 </head>
 <body>
+  <header>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="upload.html" class="active">Advertentie uploaden</a>
+      <a href="policy-privacy.html">Privacybeleid</a>
+      <a href="policy-terms.html">Terms</a>
+      <a href="policy-pricing.html">Prijzenbeleid</a>
+      <a href="policy-ai.html">AI-beleid</a>
+      <a href="policy-admatch.html">AdMatch-beleid</a>
+      <a href="policy-pjotters.html">Pjotters-Company</a>
+    </nav>
+  </header>
+  <main>
+    <section class="upload-section">
+      <h2>Advertentie uploaden</h2>
+      <form id="uploadForm" enctype="multipart/form-data" autocomplete="off">
+        <div class="form-group">
+          <label for="company">Bedrijf <span style="color:#2979ff">*</span></label>
+          <input type="text" id="company" name="company" required placeholder="Naam van uw bedrijf of adverteerder">
+        </div>
+        <div class="form-group">
+          <label for="audience">Publiek (leeftijd) <span style="color:#2979ff">*</span></label>
+          <select id="audience" name="audience" required>
+            <option value="">Kies leeftijdsgroep...</option>
+            <option value="all">Alle leeftijden</option>
+            <option value="kids">Kinderen (0-12)</option>
+            <option value="teens">Tieners (13-17)</option>
+            <option value="adults">Volwassenen (18+)</option>
+            <option value="seniors">Senioren (65+)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="subject">Onderwerp <span style="color:#2979ff">*</span></label>
+          <input type="text" id="subject" name="subject" required placeholder="Typ om te zoeken..." autocomplete="off" list="subjectsList">
+          <datalist id="subjectsList"></datalist>
+        </div>
+        <div class="form-group">
+          <label for="adfile">Advertentie uploaden <span style="color:#2979ff">*</span></label>
+          <input type="file" id="adfile" name="file" accept="image/png,image/jpeg,image/webp,video/mp4,video/webm" required>
+        </div>
+        <div class="form-group" id="adTextGroup" style="display:none;">
+          <label for="adtext">Advertentie tekst</label>
+          <textarea id="adtext" name="text" rows="3" placeholder="Welke tekst wordt er onder de advertentie gezet?"></textarea>
+        </div>
+        <div class="form-group" id="logoGroup" style="display:none;">
+          <label for="logo">Logo uploaden</label>
+          <input type="file" id="logo" name="logo" accept="image/png,image/jpeg,image/webp">
+        </div>
+        <div class="form-group">
+          <label for="website">Website link <span style="color:#2979ff">*</span></label>
+          <input type="url" id="website" name="website" required placeholder="https://uw-bedrijf.nl">
+        </div>
+        <div class="form-group">
+          <label for="adminNote">Toevoeging voor admins</label>
+          <textarea id="adminNote" name="adminNote" rows="2" placeholder="Opmerking voor admins..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Expliciet</label>
+          <select id="explicit" name="explicit" required>
+            <option value="no">Nee</option>
+            <option value="yes">Ja</option>
+          </select>
+        </div>
+        <div class="form-group explicit-extra" id="explicitExtraGroup" style="display:none;">
+          <label for="explicitExtra">Wat is er expliciet?</label>
+          <textarea id="explicitExtra" name="explicitExtra" rows="2" placeholder="Beschrijf wat er expliciet is..."></textarea>
+        </div>
+        <div class="form-group" style="margin-top:2em;">
+          <label>Developer API key <span style="color:#b8b8d1;font-size:0.9em;">(optioneel, alleen voor developers)</span></label>
+          <input type="text" id="apiKey" name="apiKey" placeholder="API key (alleen invullen als developer)">
+        </div>
+        <div class="form-group">
+          <label>Developer Secret <span style="color:#b8b8d1;font-size:0.9em;">(optioneel, alleen voor developers)</span></label>
+          <input type="text" id="secret" name="secret" placeholder="Secret (alleen invullen als developer)">
+        </div>
+        <div class="form-group" style="margin-top:2em;">
+          <label>Beleidsvinkjes <span style="color:#2979ff">*</span></label>
+          <div style="background:var(--secondary-bg);padding:1em;border-radius:8px;">
+            <label><input type="checkbox" required name="privacy"> Privacybeleid: Uw gegevens worden verwerkt volgens de AVG/GDPR. <a class="policy-link" href="policy-privacy.html" target="_blank">Lees meer</a></label>
+            <label><input type="checkbox" required name="terms"> Terms of Service: U gaat akkoord met de algemene voorwaarden. <a class="policy-link" href="policy-terms.html" target="_blank">Lees meer</a></label>
+            <label><input type="checkbox" required name="pricing"> Prijzenbeleid: U begrijpt het prijsmodel van AdMatch. <a class="policy-link" href="policy-pricing.html" target="_blank">Lees meer</a></label>
+            <label><input type="checkbox" required name="admatch"> AdMatch-beleid: Uw advertentie voldoet aan de AdMatch gedragscode. <a class="policy-link" href="policy-admatch.html" target="_blank">Lees meer</a></label>
+            <label><input type="checkbox" required name="pjotters"> Pjotters-Company + Match b.v: U erkent het moederbedrijf. <a class="policy-link" href="policy-pjotters.html" target="_blank">Lees meer</a></label>
+            <label><input type="checkbox" name="ai"> AI-beleid: U begrijpt het beleid voor AI-content. <a class="policy-link" href="policy-ai.html" target="_blank">Lees meer</a></label>
+          </div>
+        </div>
+        <div style="margin-top:2em;">
+          <button class="button" type="submit">Uploaden</button>
+        </div>
+        <div id="uploadResult" style="margin-top:2em;"></div>
+      </form>
+      <div style="margin-top:2em;color:#b8b8d1;font-size:0.97em;">
+        <b>Let op:</b> Developers moeten altijd hun eigen API key + secret invullen. Voor uploads via de officiële AdMatch-site hoef je deze velden niet in te vullen.
+      </div>
+    </section>
+  </main>
+  <footer>&copy; 2025 AdMatch / MediaMatch</footer>
+  <script>
+    // Doorverwijzen naar login indien niet ingelogd
+    let userId = localStorage.getItem('userId');
+    if (!userId) {
+      window.location.href = '/MediaMatch/Frontend/login.html';
+    }
+    // Onderwerpen laden en autocomplete vullen
+    fetch(window.config.apiUrl + '/api/admatch/subjects').then(r=>r.json()).then(data => {
+      const list = document.getElementById('subjectsList');
+      list.innerHTML = '';
+      data.subjects.forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s;
+        list.appendChild(opt);
+      });
+    });
+    // Conditioneel tonen van tekst/logo velden op basis van abonnement
+    // (simulatie: altijd tonen voor demo, pas aan voor echte abbo-check)
+    document.getElementById('adfile').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const isVideo = file.type.startsWith('video/');
+      document.getElementById('adTextGroup').style.display = isVideo ? 'block' : 'block';
+      document.getElementById('logoGroup').style.display = isVideo ? 'block' : 'block';
+    });
+    // Expliciet veld logica
+    document.getElementById('explicit').addEventListener('change', function(e) {
+      document.getElementById('explicitExtraGroup').style.display = e.target.value === 'yes' ? 'block' : 'none';
+    });
+    // Upload formulier handler
+    document.getElementById('uploadForm').onsubmit = async function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const formData = new FormData(form);
+      formData.set('userId', localStorage.getItem('userId'));
+      // API key/secret optioneel (alleen developers)
+      const apiKey = form.apiKey.value.trim();
+      const secret = form.secret.value.trim();
+      if (apiKey && !secret) return alert('Vul zowel API key als secret in, of laat beide leeg.');
+      if (secret && !apiKey) return alert('Vul zowel API key als secret in, of laat beide leeg.');
+      if (apiKey) formData.set('apiKey', apiKey);
+      if (secret) formData.set('secret', secret);
+      // Expliciet extra check
+      if (form.explicit.value === 'yes' && !form.explicitExtra.value.trim()) {
+        return alert('Beschrijf wat er expliciet is.');
+      }
+      // Beleidsvinkjes checken
+      if (!form.privacy.checked || !form.terms.checked || !form.pricing.checked || !form.admatch.checked || !form.pjotters.checked) {
+        return alert('U moet akkoord gaan met alle verplichte beleidsregels.');
+      }
+      const resultBox = document.getElementById('uploadResult');
+      resultBox.innerText = 'Uploaden...';
+      try {
+        const resp = await fetch(window.config.apiUrl + '/api/admatch/upload', {
+          method: 'POST',
+          body: formData
+        });
+        const data = await resp.json();
+        if (!resp.ok) {
+          resultBox.innerHTML = '<span style="color:#ff5252">Fout: ' + (data.error||'Onbekende fout') + '</span>';
+        } else {
+          resultBox.innerHTML = '<span class="success-msg">Succes! Advertentie geüpload (id: '+data.id+')</span>' + (data.unlimited ? ' <span style="color:#2979ff">(onbeperkt)</span>' : '') + (data.usage!==undefined ? `<br>Gebruikt: ${data.usage} / ${data.limit}` : '');
+          form.reset();
+        }
+      } catch (err) {
+        resultBox.innerHTML = '<span style="color:#ff5252">Fout bij uploaden</span>';
+      }
+    };
+  </script>
+</body>
+</html>
+
   <header>
     <h1>AdMatch</h1>
     <nav>

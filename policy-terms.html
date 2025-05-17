@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terms of Service | AdMatch</title>
+  <link rel="stylesheet" href="style-mediamatch-blue.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="upload.html">Advertentie uploaden</a>
+      <a href="policy-privacy.html">Privacybeleid</a>
+      <a href="policy-terms.html" class="active">Terms</a>
+      <a href="policy-pricing.html">Prijzenbeleid</a>
+      <a href="policy-ai.html">AI-beleid</a>
+      <a href="policy-admatch.html">AdMatch-beleid</a>
+      <a href="policy-pjotters.html">Pjotters-Company</a>
+    </nav>
+  </header>
+  <main>
+    <section class="policy-section">
+      <h2>Terms of Service <span id="lang-toggle" style="float:right;font-size:0.7em;cursor:pointer;">English</span></h2>
+      <div id="policy-nl">
+        <div class="policy-summary">
+          Door gebruik te maken van AdMatch gaat u akkoord met de algemene voorwaarden van het platform. In dit document vindt u uw rechten en plichten als gebruiker of adverteerder.
+        </div>
+        <h3>1. Inleiding</h3>
+        <p>Deze algemene voorwaarden zijn van toepassing op alle diensten van AdMatch en Pjotters Company. Door het platform te gebruiken, accepteert u deze voorwaarden.</p>
+        <!-- ... meer tekst, structuur en secties volgen hier ... -->
+      </div>
+      <div id="policy-en" style="display:none;">
+        <div class="policy-summary">
+          By using AdMatch, you agree to the platform's general terms. This document describes your rights and obligations as a user or advertiser.
+        </div>
+        <h3>1. Introduction</h3>
+        <p>These terms apply to all services provided by AdMatch and Pjotters Company. By using the platform, you accept these terms.</p>
+        <!-- ... more text, structure and sections follow here ... -->
+      </div>
+    </section>
+  </main>
+  <footer>&copy; 2025 AdMatch / MediaMatch</footer>
+  <script>
+    document.getElementById('lang-toggle').onclick = function() {
+      var nl = document.getElementById('policy-nl');
+      var en = document.getElementById('policy-en');
+      if(nl.style.display !== 'none') { nl.style.display = 'none'; en.style.display = 'block'; this.innerText = 'Nederlands'; }
+      else { nl.style.display = 'block'; en.style.display = 'none'; this.innerText = 'English'; }
+    };
+  </script>
+</body>
+</html>
